@@ -5,35 +5,44 @@ extend schema
     )
 
 type Query {
-    # all activity for a user across content types
+    "Gets all activity for a user or by content type"
     userActivity(params: UserActivityInput!): UserActivity
-    # user activity for given content
+    "Gets user activity for given content type and ID"
     userActivityByContentId(params: UserContentInput!): UserActivity
-    # user bookmarked content
+    "Gets user bookmarked content by content type"
     userBookmarks(params: UserBookmarkInput!): UserBookmarks
-    # all user activity for content
+    "Gets all user activity for specific content type and ID"
     contentActivity(params: ContentActivityInput!): ContentActivity
 }
 
 input UserActivityInput {
-    userId: ID! # user's ID
-    contentType: ContentType # type of content; leave blank to select all
+    "The user's ID"
+    userId: ID! 
+    "The type of content to query (ARTICLE, VIDEO, or QUIZ); leave blank to select all"
+    contentType: ContentType
 }
 
 input UserContentInput {
-    userId: ID! # user's ID
-    contentType: ContentType! # type of content
-    contentId: ID! # content ID
+    "The user's ID"
+    userId: ID!
+    "The type of content to query (ARTICLE, VIDEO, or QUIZ)"
+    contentType: ContentType!
+    "The content's ID"
+    contentId: ID!
 }
 
 input UserBookmarkInput {
-    userId: ID! # user's ID
-    contentType: ContentType # type of content; leave blank to select all
+    "The user's ID"
+    userId: ID!
+    "The type of content to query (ARTICLE, VIDEO, or QUIZ); leave blank to select all"
+    contentType: ContentType
 }
 
 input ContentActivityInput {
-    contentId: ID! # ID of content
-    contentType: ContentType! # type of content
+    "The content's ID"
+    contentId: ID!
+    "The type of content to query (ARTICLE, VIDEO, or QUIZ)"
+    contentType: ContentType!
 }
 
 enum ContentType {
