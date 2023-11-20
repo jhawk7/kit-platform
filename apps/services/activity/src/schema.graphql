@@ -1,0 +1,136 @@
+extend schema
+    @link(
+        url: "https://specs.apollo.dev/federation/v2.3"
+        import: ["@key", "@interfaceObject"]
+    )
+
+type Query {
+    # all activity for a user across content types
+    userActivity(params: UserActivityInput!): UserActivity
+    # user activity for given content
+    userActivityByContentId(params: UserContentInput!): UserActivity
+    # user bookmarked content
+    userBookmarks(params: UserBookmarkInput!): UserBookmarks
+    # all user activity for content
+    contentActivity(params: ContentActivityInput!): ContentActivity
+}
+
+input UserActivityInput {
+    userId: ID! # user's ID
+    contentType: ContentType # type of content; leave blank to select all
+}
+
+input UserContentInput {
+    userId: ID! # user's ID
+    contentType: ContentType! # type of content
+    contentId: ID! # content ID
+}
+
+input UserBookmarkInput {
+    userId: ID! # user's ID
+    contentType: ContentType # type of content; leave blank to select all
+}
+
+input ContentActivityInput {
+    contentId: ID! # ID of content
+    contentType: ContentType! # type of content
+}
+
+enum ContentType {
+    ARTICLE
+    VIDEO
+    QUIZ
+}
+
+# A User's Activity across all resources
+type UserActivity {
+    userId: ID!
+    userArticles: [UserArticleInteraction]
+    userVideos: [UserVideoInteraction]
+    userQuizzes: [UserQuizInteraction]
+}
+
+type ContentActivity {
+    articleInteractions: [UserArticleInteraction]
+    videoInteractions: [UserVideoInteraction]
+    quizInteractions: [UserQuizInteraction]
+}
+
+type UserBookmarks {
+    userId: ID!
+    userArticleBookmarks: [BookmarkedArticle]
+    userVideoBookmarks: [BookmarkedVideo]
+    userQuizBookmarks: [BookmarkedQuiz]
+}
+
+type BookmarkedArticle {
+    id: ID!
+    title: String
+    description: String
+    image: String
+    slug: String
+    quizId: String
+}
+
+type BookmarkedQuiz {
+    id: ID!
+    title: String
+    description: String
+    questions: [BookmarkedQuizQuestion!]!
+}
+
+type BookmarkedQuizQuestion {
+    id: ID!
+    questionText: String
+}
+
+type BookmarkedVideo {
+    id: ID!
+    title: String
+    slug: String
+    description: String
+    duration: Int
+    image: String
+    youtubeId: String
+    quizId: String
+}
+
+enum Progress {
+    ASSIGNED
+    INPROGRESS
+    COMPLETED
+}
+
+type UserArticleInteraction {
+  interactionId: ID
+  userId: ID!
+  articleId: ID!
+  bookmarked: Boolean
+  progress: Progress
+  completed: Boolean
+  lastAccessed: String
+  screentimeSec: Int
+}
+
+type UserVideoInteraction {
+  interactionId: ID
+  userId: ID!
+  videoId: ID!
+  bookmarked: Boolean
+  progress: Progress
+  completed: Boolean
+  lastAccessed: String
+  lastVideoTimeStamp: String
+  lastVideoTimeStampSec: Int
+}
+
+type UserQuizInteraction {
+  interactionId: ID
+  userId: ID!
+  quizId: ID!
+  bookmarked: Boolean
+  progress: Progress
+  completed: Boolean
+  lastAccessed: String
+  submitted: Boolean
+}
