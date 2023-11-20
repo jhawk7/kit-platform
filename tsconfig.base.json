@@ -15,7 +15,8 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@kit-platform/user-access": ["libs/user-access/src/index.ts"]
+            "@kit-platform/user-access": ["libs/user-access/src/index.ts"],
+            "@kit-platform/user-activity": ["libs/user-activity/src/index.ts"]
         },
         "types": ["node"]
     },
