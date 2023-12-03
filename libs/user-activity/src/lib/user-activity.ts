@@ -28,6 +28,7 @@ export async function userBookmarks(userId: string, contentType: ContentType): P
       ...((!contentType || contentType === ContentType.QUIZ) && {userQuizBookmarks: await quizInteraction.userQuizBookmarks(userId)})
     };
 
+    //console.log(`THIS: ${userBookmarks.userArticleBookmarks[0].id}`);
     return userBookmarks;
 
   } catch (error) {
