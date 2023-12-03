@@ -1,7 +1,7 @@
 extend schema
     @link(
         url: "https://specs.apollo.dev/federation/v2.3"
-        import: ["@key", "@interfaceObject"]
+        import: ["@key", "@interfaceObject", "@external"]
     )
 
 type Query {
@@ -67,41 +67,24 @@ type ContentActivity {
 
 type UserBookmarks {
     userId: ID!
-    userArticleBookmarks: [BookmarkedArticle]
-    userVideoBookmarks: [BookmarkedVideo]
-    userQuizBookmarks: [BookmarkedQuiz]
+    userArticleBookmarks: [Article]
+    userVideoBookmarks: [Video]
+    userQuizBookmarks: [Quiz]
 }
 
-type BookmarkedArticle {
-    id: ID!
-    title: String
-    description: String
-    image: String
-    slug: String
-    quizId: String
+# This is a required "stub" of the Article entity
+extend type Article @key(fields: "id") {
+  id: ID! @external
 }
 
-type BookmarkedQuiz {
-    id: ID!
-    title: String
-    description: String
-    questions: [BookmarkedQuizQuestion!]!
+# This is a required "stub" of the Video entity
+extend type Video @key(fields: "id") {
+  id: ID! @external
 }
 
-type BookmarkedQuizQuestion {
-    id: ID!
-    questionText: String
-}
-
-type BookmarkedVideo {
-    id: ID!
-    title: String
-    slug: String
-    description: String
-    duration: Int
-    image: String
-    youtubeId: String
-    quizId: String
+# This is a required "stub" of the Article entity
+extend type Quiz @key(fields: "id") {
+  id: ID! @external
 }
 
 enum Progress {

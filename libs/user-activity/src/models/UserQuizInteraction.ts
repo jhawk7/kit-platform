@@ -1,4 +1,3 @@
-import { Quiz, quizById } from "./Quiz";
 import { UserInteraction, UserProgress} from "./UserInteraction";
 import { MockQuizInteractions } from "./mock-data/MockQuizInteractions";
 
@@ -28,19 +27,14 @@ export async function allQuizInteractionsByUser(userId: string): Promise<UserQui
   }));
 }
 
-export async function userQuizBookmarks(userId: string): Promise<Quiz[]> {
-  /* Query: select * from UserQuizInteraction uq inner join Quiz q on uq.quizId = q.id where uq.userId = `userId` and uq.bookmarked = 1
-  // This assumes this services also has access to the quiz data as well as the user quiz relationships, otherwise only IDs would be returned
+export async function userQuizBookmarks(userId: string): Promise<string[]> {
+  /* Query: select * from UserQuizInteraction uq where uq.userId = `userId` and uq.bookmarked = 1
   */
 
   const userBookmarkedQuizIds = MockQuizInteractions.filter((interaction) => (interaction.userId === userId 
     && interaction.bookmarked === true)).map((interaction) => (interaction.quizId));
   
-  const userQuizBookmarks = await Promise.all(userBookmarkedQuizIds.map(async (quizId) => {
-    return await quizById(quizId);
-  }));
-
-  return userQuizBookmarks
+  return userBookmarkedQuizIds
 }
 
 export async function userQuizInteraction(userId: string, quizId: string): Promise<UserQuizInteraction> {

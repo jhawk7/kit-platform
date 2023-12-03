@@ -1,4 +1,3 @@
-import { Article, articleById } from "./Article";
 import { UserInteraction, UserProgress} from "./UserInteraction";
 import { MockArticleInteractions } from "./mock-data/MockArticleInteractions";
 
@@ -26,19 +25,14 @@ export async function allArticleInteractionsByUser(userId: string): Promise<User
   }));
 }
 
-export async function userArticleBookmarks(userId: string): Promise<Article[]> {
-  /* Query: select * from UserArticleInteraction ua inner join Article a on ua.articleId = a.id where ua.userId = `userId` and ua.bookmarked = 1
-  // This assumes this services also has access to the article data as well as the user article relationships, otherwise only IDs would be returned
+export async function userArticleBookmarks(userId: string): Promise<string[]> {
+  /* Query: select * from UserArticleInteraction ua where ua.userId = `userId` and ua.bookmarked = 1
   */
 
   const userBookmarkedArticleIds = MockArticleInteractions.filter((interaction) => (interaction.userId === userId 
     && interaction.bookmarked === true)).map((interaction) => (interaction.articleId));
   
-  const userArticleBookmarks = await Promise.all(userBookmarkedArticleIds.map(async (articleId) => {
-    return await articleById(articleId);
-  }));
-
-  return userArticleBookmarks
+  return userBookmarkedArticleIds
 }
 
 export async function userArticleInteraction(userId: string, articleId: string): Promise<UserArticleInteraction> {

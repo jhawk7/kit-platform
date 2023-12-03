@@ -53,7 +53,21 @@ const resolvers = {
                 throw new GraphQLError(error.message)
             }
         }
+    },
+
+    UserBookmarks: {
+        // return representations of content entities to be resolved by content subgraph
+        userArticleBookmarks(userBookmarks) {
+            return userBookmarks.userArticleBookmarks.map((id) => ({__typename: "Article", id: id}))
+        },
+        userVideoBookmarks(userBookmarks) {
+            return userBookmarks.userVideoBookmarks.map((id) => ({__typename: "Video", id: id}))
+        },
+        userQuizBookmarks(userBookmarks) {
+            return userBookmarks.userQuizBookmarks.map((id) => ({__typename: "Quiz", id: id}))
+        }
     }
+  
 }
 
 const server = new ApolloServer({

@@ -1,5 +1,4 @@
 import { UserInteraction, UserProgress} from "./UserInteraction";
-import { Video, videoById } from "./Video";
 import { MockVideoInteractions } from "./mock-data/MockVideoInteractions";
 
 export interface UserVideoInteraction extends UserInteraction {
@@ -31,19 +30,14 @@ export async function allVideoInteractionsByUser(userId: string): Promise<UserVi
   }));
 }
 
-export async function userVideoBookmarks(userId: string): Promise<Video[]> {
-  /* Query: select * from UserVideoInteraction uv inner join Video v on uv.videoId = v.id where uv.userId = `userId` and uv.bookmarked = 1
-  // This assumes this services also has access to the video data as well as the user video relationships, otherwise only IDs would be returned
+export async function userVideoBookmarks(userId: string): Promise<string[]> {
+  /* Query: select * from UserVideoInteraction uv where uv.userId = `userId` and uv.bookmarked = 1
   */
 
   const userBookmarkedVideoIds = MockVideoInteractions.filter((interaction) => (interaction.userId === userId 
     && interaction.bookmarked === true)).map((interaction) => (interaction.videoId));
-  
-  const userVideoBookmarks = await Promise.all(userBookmarkedVideoIds.map(async (videoId) => {
-    return await videoById(videoId);
-  }));
 
-  return userVideoBookmarks
+  return userBookmarkedVideoIds
 }
 
 export async function userVideoInteraction(userId: string, videoId: string): Promise<UserVideoInteraction> {

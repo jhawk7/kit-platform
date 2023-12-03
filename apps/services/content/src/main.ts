@@ -39,6 +39,23 @@ const resolvers = {
             );
         },
     },
+
+    // resolve references to content entities 
+    Article: {
+        __resolveReference(ref) {
+            return articles.find((a) => a.id === ref.id);
+        }
+    },
+    Video: {
+        __resolveReference(ref) {
+            return videos.find((v) => v.id === ref.id);
+        }
+    },
+    Quiz: {
+        __resolveReference(ref) {
+            return quizzes.find((q) => q.id === ref.id);
+        }
+    }
 };
 
 const server = new ApolloServer({
